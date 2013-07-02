@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block navigation %}
+<ul>
+	<li> <a href="{% url 'views.welcome' %}"> Home </a> </li>
+	<!-- <li> <a href="#"> News </a> </li> -->
+	<li> <a href="#"> Contact</a> </li>
+{% endblock %}
+
+
+	{% block content %} 
+
+	<div class="rightbar">
+		<h3> Login/Signup </h3>
+		<!--
+		<form name="login" autocomplete="on">
+		Username: <input type="text" name="username"><br>
+		Password: <input type="password" name="pwd"><br>
+		<input type="submit" value="Submit">
+		</form>
+		-->
+
+		<form action="" method="POST">{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" value="Submit" />
+		</form>
+
+		<a href="{% url 'views.newuser' %}"> New User ? Sign Up </a>
+	</div>
+
+	<h2> Welcome </h2>
+	<p>
+	This is sample content. <br> This section contains some welcome text introducing the organization. <br><br><br>
+	</p>
+	{% endblock %}

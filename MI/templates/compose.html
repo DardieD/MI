@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+	{% block content %} 
+	<!--
+	<form name="compose_form">
+	Send To:
+	<select>
+		#for each list in client.lists 
+	  <option value="listdomain">ListName</option>
+	</select> <br>
+	Subject: 
+	<input name="subject" type="text"> <br>
+	Message: <br>
+	<textarea rows="4" cols="50"> 	</textarea> <br>
+	
+	<input name="attachment" type="file"><br>
+	<input type="submit" value="SEND"><br>
+	</form>
+	-->
+
+	<form action="/compose/" method="post">{% csrf_token %}
+	{{ form.as_p }}
+	<input type="submit" value="Submit" />
+	</form>
+	{% endblock %}

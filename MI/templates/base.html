@@ -1,0 +1,59 @@
+{% load static %}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+<head>
+<title> Member Interface </title>
+<link rel="stylesheet" href="{% static 'MemberInterface/css/style.css' %}">
+</head>
+<body>
+<div id="container">
+<div id="header"> 
+	<!-- Secondary links -->
+	<div id="slinks"> 
+	<ul>
+	<li> <a href="#"> Link 1 </a> </li>
+	<li> <a href="#"> Link 2 </a> </li>
+	<li> <a href="#"> Link 3 </a> </li>
+	</ul>
+	</div>
+
+	<img src="{% static 'MemberInterface/img/sample_logo.jpg' %}" alt="Sample Logo"/>
+	<h1> Organization name </h1>
+	
+</div><!-- end of header -->
+<div id="navbar"> 
+	{% block navigation %}
+	<ul>
+	<!-- Note: After backend integration, replace sampleuser with client.user.user_name (or equivalent) -->
+	<li> <a href="{% url 'views.home' 'sampleuser' %}"> Home </a> </li>
+	<li> <a href="{% url 'views.lists' %}">List Options </a> </li>
+	<li> <a href="{% url 'views.archives' %}">Archives </a> </li>
+	<!-- <li> <a href="#">Favourites </a> </li> -->
+	<li> <a href="#">Settings </a> 
+		<ul>
+		<li> <a href="{% url 'views.profile' %}">Profile </a> </li>
+		<li> <a href="#">Preferences </a> </li>
+		<li> <a href="#">Logout </a> </li>
+		</ul>
+		</li>
+		
+	</ul>
+	{% endblock %}
+</div> <!-- end of navbar -->
+<div id="gotop">
+<a href="#header">Top</a>
+</div>
+<div id="content"> 
+
+	{% block content %} 
+
+	{% endblock %}
+
+</div> <!-- end of content -->
+<div id="footer"> 
+A Systers-GSOC'13 Project
+</div> <!-- end of footer -->
+</div> <!--end of container-->
+</body>
+</html>

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+	{% block content %} 
+	<div class="rightbar">	<a href="{% url 'views.compose' %}"> Compose </a> </div>
+	<h2> Welcome {{ Username }}</h2>
+	
+<!-- for conversation in conversation_list :
+	render conversation in divs
+	add buttons
+-->
+
+	{% endblock %}
