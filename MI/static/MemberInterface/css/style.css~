@@ -153,7 +153,7 @@ overflow:hidden;
 }
 .msglistname{
 font-size: 10px;
-padding:0px 40px;
+padding:0px 30px;
 text-align:right;
 }
 .msgsubject{
@@ -162,7 +162,7 @@ font-weight:bold;
 }
 .msgdate{
 font-size: 10px;
-padding:0px 40px;
+padding:0px 30px;
 text-align:right;
 }
 .msgauthor{

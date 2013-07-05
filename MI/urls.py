@@ -9,7 +9,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('', 
 	(r'^$', views.welcome),
-	(r'^home/(.+)/$', views.home ),
+	(r'^home/$', views.home ),
 	(r'^compose/$', views.compose),
 	(r'^archives/$', views.archives),
 	(r'^archives/(\d+)/$', views.archives),
@@ -17,6 +17,7 @@ urlpatterns = patterns('',
 	(r'^profile/$', views.profile),
 	(r'^newuser/$', views.newuser),
 	(r'^test/$', views.test),
+	(r'^logout/$',views.logout),
 )
 
 urlpatterns += django.contrib.staticfiles.urls.staticfiles_urlpatterns()

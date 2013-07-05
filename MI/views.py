@@ -4,14 +4,15 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 import forms
 from use_client import t
+from Message import Message
+from django.contrib.auth.models import User
+from django.contrib import auth
 
 def test(reuest):
 	'''
 	Testing mailman.client in app
 	'''
-
-	fc = t()
-	return render_to_response('testhtml.html', {'fromclient':t})
+	return render_to_response('testhtml.html', {'fromclient':t()})
 
 def welcome(request):
 	'''
@@ -22,20 +23,45 @@ def welcome(request):
 		form = forms.Login(request.POST)
 		if form.is_valid(): 
 			# Process the data in form.cleaned_data
-			responseurl = '/home/' + form.cleaned_data['username'] + '/' ; 
-			return HttpResponseRedirect(responseurl)
+			#responseurl = '/home/' + form.cleaned_data['username'] + '/' ; 
+			username = request.POST.get('username', '')
+			password = request.POST.get('password', '')
+			user = auth.authenticate(username=username, password=password)
+			if user is not None and user.is_active:
+				# Correct password, and the user is marked "active"
+				auth.login(request, user)
+				# Redirect to a success page.
+				return HttpResponseRedirect("/home/")
+			else:
+				# Show an error page
+				return HttpResponseRedirect("/")
 	else:
         	form = forms.Login() # An unbound form
 
 	return render_to_response('welcome.html', {'form': form}, context_instance=RequestContext(request))
 
-def home(request, user):
+def home(request):
 	'''
 	View for User's Home Page
 	Authenticaltion required
 	'''
-	return render_to_response('home.html', {'Username':user})
+	if request.user.is_authenticated():
+    		# Authenticated user
+		#create message object
+		amessage = Message()
+		#create message dictionary for template
+		#mslist = amessage.getMessage() #throws error: getMessage() takes no arguments one given
+		#dummy data
+		mslist = {'subject':amessage.subject, 'author':amessage.author,'date':amessage.date, 'listname':amessage.listname, 'msg':amessage.msg,'msgid':amessage.msgid}
+		#return render_to_response('home.html', {'Username':user,'mslist':mslist})
+		return render_to_response('home.html', {'mslist':mslist}, context_instance=RequestContext(request))
 
+	else:
+		# Anonymous user
+		mslist = {'subject':"Anonymous", 'author':"Anonymous",'date':"No Date", 'listname':"No list", 'msg':"Sorry, you need to login" ,'msgid':"00927"}
+		#return render_to_response('home.html', {'Username':"Anonymous User",'mslist':mslist})
+		return render_to_response('home.html', {'mslist':mslist}, context_instance=RequestContext(request))
+	
 def compose(request):
 	'''
 	View for the compose screen
@@ -83,9 +109,24 @@ def newuser(request):
 		form = forms.SignUp(request.POST)
 		if form.is_valid(): 
 		    	# Process the data in form.cleaned_data
+			name = request.POST.get('name', '')
+			pwd = request.POST.get('pwd', '')
+			email = request.POST.get('email', '')
+			essay = request.POST.get('essay', '')
+			print name, pwd, email, essay
+			user = User.objects.create_user(username=name,email=email,password=pwd)
+			user.save()
 			return HttpResponseRedirect('/thanks/')
 	else:
         	form = forms.SignUp() # An unbound form
 
 	return render_to_response('signup.html', {'form': form}, context_instance=RequestContext(request))
+
+def logout(request):
+	'''
+	View for user logout
+	'''
+	auth.logout(request)
+	# Redirect to a success page.
+	return HttpResponseRedirect("/")
 

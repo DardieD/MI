@@ -1,0 +1,12 @@
+class message:
+
+	def __init__(self,subject="HELLO",author="JD",date="TODAY",listname="WELCOME",msg="The sky is blue",msgid="m001"):
+		self.subject = subject
+		self.author= author
+		self.date= date
+		self.listname= listname
+		self.msg= msg
+		self.msgid= msgid
+
+
+
