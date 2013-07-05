@@ -16,6 +16,7 @@ urlpatterns = patterns('',
 	(r'^lists/$', views.lists),
 	(r'^profile/$', views.profile),
 	(r'^newuser/$', views.newuser),
+	(r'^test/$', views.test),
 )
 
 urlpatterns += django.contrib.staticfiles.urls.staticfiles_urlpatterns()

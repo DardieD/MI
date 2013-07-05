@@ -1,6 +1,6 @@
 import django.contrib.staticfiles.urls 
 from django.conf.urls import patterns, include, url
-from MemberInterface import views, settings
+from MI import views, settings
 from django.conf.urls.static import static
 
 # Uncomment the next two lines to enable the admin:

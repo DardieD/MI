@@ -12,6 +12,6 @@ def t():
 	return path
 
 
-MM_PATH = '/root/mailman.client/src/'
+MM_PATH = '/root/mailman.client/src'
 if not MM_PATH in path:
     path.append(MM_PATH)

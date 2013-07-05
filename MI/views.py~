@@ -9,9 +9,9 @@ def test(reuest):
 	'''
 	Testing mailman.client in app
 	'''
-
+	testhtml = '<html><body> {{fromclient}} </body></html>'
 	fc = t()
-	return render_to_response('testhtml.html', {'fromclient':t})
+	return render_to_response(testhtml, {'fromclient':t})
 
 def welcome(request):
 	'''

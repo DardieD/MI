@@ -2,11 +2,31 @@
 
 	{% block content %} 
 	<div class="rightbar">	<a href="{% url 'views.compose' %}"> Compose </a> </div>
-	<h2> Welcome {{ Username }}</h2>
-	
-<!-- for conversation in conversation_list :
-	render conversation in divs
-	add buttons
--->
+	<!-- <h2> Welcome {{ Username }}</h2> -->
+	{% if user.is_authenticated %}
+	  <h2>Welcome, {{ user.username }}. Thanks for logging in.</h2>
+	{% else %}
+	  <h2>Welcome, new user. Please log in.</h2>
+	{% endif %}
+	<!--This will later be looped over each recent message-->
+
+		<div class="message_single">
+
+		<!-- To be replaced with coloured buttons -->
+		<div class="msgbuttons">
+		<div class="replybutton"> <a href="#"> </a></div>
+		<div class="unsubscribebutton"> <a href="#"> </a></div>
+		<div class="viewbutton"> <a href="#"> </a></div>
+		</div>
+		<!-- end of button list -->
+
+		<div class="msglistname"> {{ mslist.listname }} </div>
+		<div class="msgdate"> {{ mslist.date }} </div>
+		<div class="msgsubject"> {{ mslist.subject }} </div>
+		<div class="msgauthor"> {{ mslist.author}} said:  </div> 
+		<div class="msg"> {{ mslist.msg }} </div>
+		
+		</div>
+	<!--end-->
 
 	{% endblock %}

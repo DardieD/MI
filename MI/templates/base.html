@@ -26,7 +26,7 @@
 	{% block navigation %}
 	<ul>
 	<!-- Note: After backend integration, replace sampleuser with client.user.user_name (or equivalent) -->
-	<li> <a href="{% url 'views.home' 'sampleuser' %}"> Home </a> </li>
+	<li> <a href="{% url 'views.home' %}"> Home </a> </li>
 	<li> <a href="{% url 'views.lists' %}">List Options </a> </li>
 	<li> <a href="{% url 'views.archives' %}">Archives </a> </li>
 	<!-- <li> <a href="#">Favourites </a> </li> -->
@@ -34,7 +34,7 @@
 		<ul>
 		<li> <a href="{% url 'views.profile' %}">Profile </a> </li>
 		<li> <a href="#">Preferences </a> </li>
-		<li> <a href="#">Logout </a> </li>
+		<li> <a href="{% url 'views.logout' %}">Logout </a> </li>
 		</ul>
 		</li>
 		
