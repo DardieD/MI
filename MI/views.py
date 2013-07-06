@@ -3,16 +3,16 @@ from django.template import Context, RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 import forms
-from use_client import t
+from use_client import t, getListOfLists
 from Message import Message
 from django.contrib.auth.models import User
 from django.contrib import auth
 
-def test(reuest):
+def test(request):
 	'''
 	Testing mailman.client in app
 	'''
-	return render_to_response('testhtml.html', {'fromclient':t()})
+	return render_to_response('testhtml.html', {'fromclient':t()}, context_instance=RequestContext(request))
 
 def welcome(request):
 	'''
@@ -93,7 +93,8 @@ def lists(request):
 	View for rendering all available lists
 	? Need user_id to access user's subscribed lists 
 	'''
-	return render_to_response('lists.html')
+	lists, alllists = getListOfLists(request.user.email)
+	return render_to_response('lists.html', {'lists':lists, 'alllists':alllists}, context_instance=RequestContext(request))
 
 def profile(request):
 	'''

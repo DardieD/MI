@@ -6,5 +6,26 @@
 	render list as dropdown
 	render buttons for subscribe/unsubscribe
 -->
+	You are subscribed to:
+	<div class="list-container">
+	<ul>	
+		{% for item in lists %}		
+		<div class="alist">
+		<li> {{item}} </li>
+		</div>
+		{% endfor %}
+	</ul>
+	
+	Other lists:
+	<ul>	
+		{% for item in alllists %}		
+		<div class="alist">
+		{% if item not in lists %}
+		<li> {{item}} </li>
+		{% endif %}
+		</div>
+		{% endfor %}
+	</ul>
+	</div>
 
 	{% endblock %}

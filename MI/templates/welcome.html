@@ -12,13 +12,9 @@
 
 	<div class="rightbar">
 		<h3> Login/Signup </h3>
-		<!--
-		<form name="login" autocomplete="on">
-		Username: <input type="text" name="username"><br>
-		Password: <input type="password" name="pwd"><br>
-		<input type="submit" value="Submit">
-		</form>
-		-->
+		<!-- print error message, if any -->
+		<div class="error">
+		</div>
 
 		<form action="" method="POST">{% csrf_token %}
 		{{ form.as_p }}
