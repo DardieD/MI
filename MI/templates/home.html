@@ -4,12 +4,13 @@
 	<div class="rightbar">	<a href="{% url 'views.compose' %}"> Compose </a> </div>
 	<!-- <h2> Welcome {{ Username }}</h2> -->
 	{% if user.is_authenticated %}
-	  <h2>Welcome, {{ user.username }}. Thanks for logging in.</h2>
+	  <h2>Welcome, {{ user.username }}</h2>
 	{% else %}
 	  <h2>Welcome, new user. Please log in.</h2>
 	{% endif %}
 	<!--This will later be looped over each recent message-->
 
+	{% for ms in mslist %}
 		<div class="message_single">
 
 		<!-- To be replaced with coloured buttons -->
@@ -20,13 +21,14 @@
 		</div>
 		<!-- end of button list -->
 
-		<div class="msglistname"> {{ mslist.listname }} </div>
-		<div class="msgdate"> {{ mslist.date }} </div>
-		<div class="msgsubject"> {{ mslist.subject }} </div>
-		<div class="msgauthor"> {{ mslist.author}} said:  </div> 
-		<div class="msg"> {{ mslist.msg }} </div>
+		<div class="msglistname"> {{ ms.listname }} </div>
+		<div class="msgdate"> {{ ms.date }} </div>
+		<div class="msgsubject"> {{ ms.subject }} </div>
+		<div class="msgauthor"> {{ ms.author}} said:  </div> 
+		<div class="msg"> {{ ms.msg }} </div>
 		
 		</div>
+	{% endfor %}
 	<!--end-->
 
 	{% endblock %}

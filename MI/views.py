@@ -3,16 +3,13 @@ from django.template import Context, RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 import forms
-from use_client import t, getListOfLists
-from Message import Message
 from django.contrib.auth.models import User
 from django.contrib import auth
+from django.core.mail import send_mail
 
-def test(request):
-	'''
-	Testing mailman.client in app
-	'''
-	return render_to_response('testhtml.html', {'fromclient':t()}, context_instance=RequestContext(request))
+from mailclient import mmclient
+from Message import Message
+from MI import models
 
 def welcome(request):
 	'''
@@ -46,21 +43,13 @@ def home(request):
 	Authenticaltion required
 	'''
 	if request.user.is_authenticated():
-    		# Authenticated user
-		#create message object
-		amessage = Message()
-		#create message dictionary for template
-		#mslist = amessage.getMessage() #throws error: getMessage() takes no arguments one given
-		#dummy data
-		mslist = {'subject':amessage.subject, 'author':amessage.author,'date':amessage.date, 'listname':amessage.listname, 'msg':amessage.msg,'msgid':amessage.msgid}
-		#return render_to_response('home.html', {'Username':user,'mslist':mslist})
+		# Filer messages for user 
+		mslist = models.MessageRenderer.objects.all()
+
 		return render_to_response('home.html', {'mslist':mslist}, context_instance=RequestContext(request))
 
 	else:
-		# Anonymous user
-		mslist = {'subject':"Anonymous", 'author':"Anonymous",'date':"No Date", 'listname':"No list", 'msg':"Sorry, you need to login" ,'msgid':"00927"}
-		#return render_to_response('home.html', {'Username':"Anonymous User",'mslist':mslist})
-		return render_to_response('home.html', {'mslist':mslist}, context_instance=RequestContext(request))
+		return render_to_response('welcome.html',context_instance=RequestContext(request))
 	
 def compose(request):
 	'''
@@ -71,14 +60,26 @@ def compose(request):
 	#To be added: compose/new and compose/reply
 
 	# If form is already submitted
-	if request.method == 'POST' or request.method =='GET': 
+
+	if request.method == 'POST': 
+		print "form already sent"
+
 		form = forms.Compose(request.POST)
 		if form.is_valid(): 
-			# Process the data in form.cleaned_data
-			return HttpResponseRedirect('/compose/')
+			print "Sending email", send_mail('Test Subject', 'Here is the message.','root@systers-dev.systers.org',['test@systers-dev.systers.org'], fail_silently=False)
+			
+			return HttpResponseRedirect('/home/')
 	else:
-        	form = forms.Login() # An unbound form
-
+		subscribed_lists, other_lists = mmclient.getListOfLists(request.user.email)
+		choices = ()
+		for lst in subscribed_lists:
+			# list name and list address
+			choices = choices + ((lst[1],lst[0]),)
+		#print "choices", choices
+		data = {'CHOICES':choices,'email':request.user.email,'subject':'Random ','message':' Random'}
+		#print "binding data"
+        	form = forms.Compose(data) # An unbound form
+		
 	return render_to_response('compose.html', {'form': form}, context_instance=RequestContext(request))
 
 
@@ -91,16 +92,10 @@ def archives(request):
 def lists(request):
 	'''
 	View for rendering all available lists
-	? Need user_id to access user's subscribed lists 
 	'''
-	lists, alllists = getListOfLists(request.user.email)
-	return render_to_response('lists.html', {'lists':lists, 'alllists':alllists}, context_instance=RequestContext(request))
 
-def profile(request):
-	'''
-	View for User Profile
-	'''
-	return render_to_response('profile.html')
+	subscribed_lists, other_lists = mmclient.getListOfLists(request.user.email)
+	return render_to_response('lists.html', {'subscribed_lists':subscribed_lists, 'other_lists':other_lists}, context_instance=RequestContext(request))
 
 def newuser(request):
 	'''
@@ -114,14 +109,35 @@ def newuser(request):
 			pwd = request.POST.get('pwd', '')
 			email = request.POST.get('email', '')
 			essay = request.POST.get('essay', '')
-			print name, pwd, email, essay
+
+			#Call sys-mailman signup module ?
 			user = User.objects.create_user(username=name,email=email,password=pwd)
 			user.save()
+
 			return HttpResponseRedirect('/thanks/')
 	else:
         	form = forms.SignUp() # An unbound form
 
 	return render_to_response('signup.html', {'form': form}, context_instance=RequestContext(request))
+
+def thanks(request):
+	'''
+	View for User Profile
+	'''
+	return render_to_response('welcome.html',context_instance=RequestContext(request))
+
+def profile(request):
+	'''
+	View for User Profile
+	'''
+	return render_to_response('profile.html')
+
+def preferences(request):
+	'''
+	Show and edit user preferences
+	'''
+	prefs = mmclient.getUserPreferences(request.user.email)
+	return render_to_response('preferences.html', {'prefs': prefs}, context_instance=RequestContext(request))
 
 def logout(request):
 	'''
@@ -130,4 +146,18 @@ def logout(request):
 	auth.logout(request)
 	# Redirect to a success page.
 	return HttpResponseRedirect("/")
+
+def subscribe(request, fqdn_listname):
+	''' 
+	Subscribe to list with fqdn_listname = fqdn_listname
+	'''
+	success = mmclient.subscribe(request.user.email, fqdn_listname)
+	return HttpResponseRedirect("/lists")
+
+def unsubscribe(request, fqdn_listname):
+	''' 
+	Subscribe to list with fqdn_listname=fqdn_listname
+	'''
+	success = mmclient.unsubscribe(request.user.email, fqdn_listname)
+	return HttpResponseRedirect("/lists")
 

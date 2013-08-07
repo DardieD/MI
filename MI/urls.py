@@ -14,10 +14,14 @@ urlpatterns = patterns('',
 	(r'^archives/$', views.archives),
 	(r'^archives/(\d+)/$', views.archives),
 	(r'^lists/$', views.lists),
+	(r'^subscribe/(.+)/$', views.subscribe),
+	(r'^unsubscribe/(.+)/$', views.unsubscribe),
 	(r'^profile/$', views.profile),
+	(r'^preferences/$',views.preferences),
 	(r'^newuser/$', views.newuser),
-	(r'^test/$', views.test),
+	(r'^thanks/$', views.thanks),
 	(r'^logout/$',views.logout),
+	(r'^admin/', include(admin.site.urls)),
 )
 
 urlpatterns += django.contrib.staticfiles.urls.staticfiles_urlpatterns()

@@ -5,12 +5,19 @@ import os.path
 PROJECT_DIR = os.path.dirname(__file__)
 
 #Settings to test-send email
-EMAIL_USE_TLS = True
-EMAIL_HOST = "localhost"
-EMAIL_HOST_USER = 'dardiedadoola@gmail.com'
+#EMAIL_USE_TLS = True
+#EMAIL_HOST = 'smtp.gmail.com'
+#EMAIL_HOST_USER = 'dardiedadoola@gmail.com'
+#EMAIL_HOST_PASSWORD = 'dardie123'
+#EMAIL_PORT = 587#1025
+#EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+#Email settings for using with postfix
+EMAIL_USE_TLS = False
+EMAIL_HOST = 'systers-dev.systers.org'
+EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
-EMAIL_PORT = 1025
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_PORT = 25
 
 TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
 "django.core.context_processors.debug",
@@ -32,7 +39,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'mi_database.db',                      # Or path to database file if using sqlite3.
+        'NAME': '/vagrant/MI/mi_database.db',   # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -143,6 +150,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
      'django.contrib.admindocs',
      'django.contrib.sessions',
+     'MI',
 )
 
 # A sample logging configuration. The only tangible logging
