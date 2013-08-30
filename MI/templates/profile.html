@@ -2,15 +2,19 @@
 
 {% block content %} 
 
+	<div class="profile">
+	<img src="{{ gurl }}"/>
+	
 	<a href="#"> Change Password </a>
 	<a href="#"> Delete User </a>
+	</div>
 	
-	<form name="profile" autocomplete="on">
-	Full Name: <input type="text" name="fname"><br>
-	Screen Name: <input type="text" name="sname"><br>
-	Email ID: <input type="email" name="email"><br>
-	Additional form fields to be added
+	<div class="profile_form">
+	
+	<form name="profile" autocomplete="on" method="post">{% csrf_token %}
+	{{ form.as_p }}
+	
 	<input type="submit" value="Update">
 	</form>
-	
+	</div>
 {% endblock %}

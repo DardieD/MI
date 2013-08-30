@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+	{% block content %} 
+	
+	{% if user.is_authenticated %}
+	
+	<!-- Display the message subject as the heading -->
+	  <h2>{{mslist.0.subject}}</h2>
+	  
+		{% for ms in mslist %}
+			<div class="message_single">
+			<div class="msgdate"> {{ ms.date }} </div>
+			<div class="msgauthor"> {{ ms.author}} said:  </div> 
+			<div class="msg"> {{ ms.msg|linebreaks }} </div>
+			</div>
+		{% endfor %}
+	
+	{% else %}
+	<!-- If an unaunthenticated user has creepd in-->
+	  <h2>Welcome, new user. Please log in.</h2>
+	{% endif %}
+	
+	<!--end-->
+	{% endblock %}

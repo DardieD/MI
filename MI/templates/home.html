@@ -17,15 +17,24 @@
 		<div class="msgbuttons">
 		<div class="replybutton"> <a href="#"> </a></div>
 		<div class="unsubscribebutton"> <a href="#"> </a></div>
-		<div class="viewbutton"> <a href="#"> </a></div>
+		<div class="viewbutton"> <a href="{% url 'views.conversation' ms.threadid %}">  </a></div>
 		</div>
 		<!-- end of button list -->
 
+		<!-- The message -->
 		<div class="msglistname"> {{ ms.listname }} </div>
 		<div class="msgdate"> {{ ms.date }} </div>
 		<div class="msgsubject"> {{ ms.subject }} </div>
 		<div class="msgauthor"> {{ ms.author}} said:  </div> 
-		<div class="msg"> {{ ms.msg }} </div>
+		<div class="msg"> {{ ms.msg|linebreaks }} </div>
+		<!-- End of message -->
+		
+		<!-- The reply-to form 
+		<div class="msgreply">
+		<textarea></textarea>
+		<a href=""> Send </a>
+		</div>
+		End of reply-to form-->
 		
 		</div>
 	{% endfor %}

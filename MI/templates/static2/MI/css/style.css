@@ -6,7 +6,7 @@ color: black;
 /** CONTAINER**/
 #container{
 /*border: 1px solid black;*/
-overflow: auto;
+overflow: none;
 max-width: 90%;
 margin-left: auto;
 margin-right: auto;
@@ -134,141 +134,31 @@ height: 10px;
 color: black;
 }
 
+/** ERRORLIST Override **/
+.errorlist{
+list-style-type: none;
+width: 100%;
+border: 1px solid red;
+}
+
+.errorlist li{
+color: red;
+}
+
 /** CONTENT **/
 #content{
 /*border: 1px solid black;*/
 margin: 20px;
 padding: 5px;
-overflow:auto;
+overflow:none;
 
 }
-
-/* DJANGO ERRORLIST */
-.errorlist ul{
-list-style-type: none;
-background-color: #FFCCCC;
-border: 1px solid red;
-}
-
-.errorlist ul li{
-color: red;
-}
-
-/* Single Message Style*/
-
-.message_single{
-border: 1px solid black;
-padding: 5px;
-margin: 5px;
-overflow:hidden;
-}
-.msglistname{
-font-size: 10px;
-padding:0px 40px;
-text-align:right;
-}
-.msgsubject{
-font-size: 12px;
-font-weight:bold;
-}
-.msgdate{
-font-size: 10px;
-padding:0px 40px;
-text-align:right;
-}
-.msgauthor{
-font-size: 12px;
-font-weight:bold;
-}
-.msg{
-font-size: 12px;
-}
-
-.msgbuttons{
-float: right;
-}
-
-.replybutton{
-background: green;
-margin: 1px;
-color: green;
-width: 25px;
-height: 25px;
-float: right;
-clear:both;
-}
-
-.replybutton a{
-width: 25px;
-height: 25px;
-text-decoration:none;
-display:block;
-}
-
-.unsubscribebutton{
-background: red;
-margin: 1px;
-color: red;
-width: 25px;
-height: 25px;
-float: right;
-clear:both;
-}
-
-.unsubscribebutton a{
-width: 25px;
-height: 25px;
-text-decoration:none;
-display:block;
-
-}
-
-.viewbutton{
-background: blue;
-margin: 1px;
-color: blue;
-width: 25px;
-height: 25px;
-float: right;
-clear:both;
-}
-
-.viewbutton a{
-width: 25px;
-height: 25px;
-text-decoration:none;
-display:block;
-}
-
-/* end of single message style */
 
 .rightbar{
 border: 1px solid black;
 padding: 10px;
 float: right;
 }
-
-/* CSS for login form */
-.rightbar input,textarea,select,button{
-width: 100%
-}
-
-/* Form Style */
-label{
-display: block;
-width: 150px;
-}
-
-input, textarea, select, button {
-  width : 100%;
-  max-width: 600px;
-  margin: 0;
-
-  -webkit-box-sizing: border-box; /* For legacy WebKit based browsers */
-     -moz-box-sizing: border-box; /* For all Gecko based browsers */
-          box-sizing: border-box;
-}
-
 
 /** REPLY TEXTAREA **/
 
@@ -296,13 +186,11 @@ color: green;
 /* CSS for User Profile Page */
 
 .profile{
-max-width: 400px;
-float: left;
 overflow: none;
 }
 
 .profile img{
-padding: 10px;
+float: left;
 }
 
 .profile a{
@@ -321,27 +209,6 @@ color: blue;
 display: block;
 text-decoration: none;
 }
-
-.profile_form{
-padding: 10px;
-max-width: 600px;
-float: left;
-}
-
-.profile_form input[type=text]{
-}
-
-.profile_form input[type=email]{
-
-}
-
-.profile_form label{
-display: inline;
-float: left;
-width: 150px;
-}
-
-
 
 /** FOOTER **/
 #footer{
