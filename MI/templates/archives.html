@@ -1,8 +1,27 @@
 {% extends "base.html" %}
 
 	{% block content %} 
-<!-- for conversation in conversation_list :
-	render conversation in divs
-	add buttons
--->
+
+	{% if form  %}
+	<form class="ar" action="/archives/" method="post">{% csrf_token %}
+	{{ form.as_p }}
+	<input type="submit" value="Submit" />
+	</form>
+	{%endif%}
+	
+	{% if mslist %}
+	
+		<table>
+		{% for ms in mslist %}
+		<tr>
+		
+		<td> {{ms.date}}</td>
+		<td><a href="{% url 'views.conversation' ms.threadid %}"> {{ ms.subject }} </a></td>
+		
+		</tr>
+		{% endfor %}
+		</table>
+	
+	{%endif%}
+	
 	{% endblock %}

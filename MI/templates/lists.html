@@ -10,10 +10,13 @@
 	<div class="list-container">
 	<ul>	
 		{% for item in subscribed_lists %}		
-		<div class="alist">
+		<div class="subscribed_list">
+		
+		<a href="{% url 'views.unsubscribe' item.1 %}">  </a>
 		<!-- get first item from list i.e. list_name -->
-		<li> {{item.0}} </li>
-		<a href="{% url 'views.unsubscribe' item.1 %}"> Unsubscribe </a>
+		<li class="list-name"> {{item.0}} </li>
+		<li class="list-desc"> {{item.2}} </li>
+		
 		</div>
 		{% endfor %}
 	</ul>
@@ -21,10 +24,13 @@
 	Other lists:
 	<ul>	
 		{% for item in other_lists %}		
-		<div class="alist">
+		<div class="unsubscribed_list">
+		
+		<a href="{% url 'views.subscribe' item.1 %}">  </a>
 		<!-- get first item from list i.e. list_name -->
-		<li> {{item.0}} </li>
-		<a href="{% url 'views.subscribe' item.1 %}"> Subscribe </a>
+		<li class="list-name"> {{item.0}} </li>
+		<li class="list-desc"> {{item.2}} </li>
+		
 		</div>
 		{% endfor %}
 	</ul>

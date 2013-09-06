@@ -1,6 +1,6 @@
 from MI import models
 from MI.mailclient import mmclient
-
+from django.db.models import F
 
 def getLatestMessages(email, n=10):
 	'''
@@ -21,7 +21,8 @@ def getMessagesByList(list_of_lists, n=10):
 	'''
 	Get the last n messages from matching list(s)
 	'''
-	message_list = models.MessageRenderer.objects.filter(listname__in=subscribed_lists).order_by('pk').reverse()[:n]
+	message_list = models.MessageRenderer.objects.filter(listname__in=list_of_lists).order_by('pk').reverse()[:n]
+	
 	return message_list
 
 def getMessageByThreadID(threadid):
@@ -33,7 +34,7 @@ def getMessageByThreadID(threadid):
 	print "Message List length: ", len(message_list)
 	return message_list
 	
-def getMessagesByDate():
+def getMessagesByDate(from_date, to_date):
 	'''
 	'''
 	return []
@@ -43,6 +44,14 @@ def getMessagesByAuthor():
 	'''
 	return []
 	
+def getMessagesBasicAchive(listname, from_date,to_date):
+	'''
+	Get messages for given listname within date range
+	Only display first message in thread ( where msgid = threadid )
+	Basic Archives Display
+	'''
+	message_list = models.MessageRenderer.objects.filter(listname=listname).filter(date__range=[from_date, to_date]).filter(msgid=F('threadid')).order_by('-pk')
+	return message_list
 
 '''
 from sys import path

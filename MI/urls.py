@@ -12,9 +12,12 @@ urlpatterns = patterns('',
 	(r'^home/$', views.home ),
 	(r'^conversation/(.+)$', views.conversation ), 
 	(r'^compose/$', views.compose),
-	(r'^reply/(.+)$', views.reply),
+	
+	(r'^reply/(?P<subject>.+)/(?P<msgid>.+)/(?P<rec>.+)/(?P<message>.+)$', views.reply),
+	
 	(r'^archives/$', views.archives),
-	(r'^archives/(\d+)/$', views.archives),
+	
+	
 	(r'^lists/$', views.lists),
 	(r'^subscribe/(.+)/$', views.subscribe),
 	(r'^unsubscribe/(.+)/$', views.unsubscribe),

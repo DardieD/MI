@@ -2,16 +2,17 @@ from django.template.loader import get_template
 from django.template import Context, RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
-import forms
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
+from django.core.mail import EmailMessage
 
 from mailclient import mmclient
 from Message import Message
 from MI import models
 from MI.view import MessageRender
+import forms
 
 from sqlite3 import IntegrityError
 
@@ -96,56 +97,48 @@ def compose(request):
 	
 	
 @login_required
-def reply(request, subject, msgid, rec):
+def reply(request, subject, msgid, rec, message):
 	'''
 	View for the Reply screen
 	Replying to message with subject and msgid given 
 	Recipient is the rec list
 	'''
-	# If form is already submitted
-	if request.method == 'POST': 
-		form = forms.Compose(request.POST)
-		if form.is_valid(): 
-			message = form.cleaned_data['message']
-			sender = request.user.email
-			recipient = []
-			recipient.append(rec)
-			send_mail(subject,message,sender,recipient,  headers = {'In-Reply-To': msgid} ,fail_silently=False)
-			return HttpResponseRedirect('/home/')
-	else:
-        	form = forms.Compose(request.user.email) # An unbound form
-		
-	return render_to_response('compose.html', {'form': form}, context_instance=RequestContext(request))
 	
+	sender = request.user.email
 	
+	recipient = []
+	recipient.append(rec)
 	
-
-@login_required 
-def reply(request):
-	'''
-	Send reply email with In-Reply-To rmsid
-	'''
-	if request.method == 'POST': 
-		form = forms.Compose(request.user.email, request.POST)
-		if form.is_valid(): 
-			subject = form.cleaned_data['subject']
-			message = form.cleaned_data['message']
-			sender = request.user.email
-			print "Sending email", send_mail(subject,message,'root@systers-dev.systers.org',['test@systers-dev.systers.org'], fail_silently=False)
-			
-			return HttpResponseRedirect('/home/')
-	else:
-        	form = forms.Compose(request.user.email) # An unbound form
-		
-	return render_to_response('compose.html', {'form': form}, context_instance=RequestContext(request))
-
-
+	# If Re: not in the subject line, append "Re:"	
+	if "Re:" not in subject:
+		splits = subject.split(']',1);
+		subject = splits[0] + "] Re: " + splits[1]
+	
+	mssg = EmailMessage(subject,message,sender,recipient,  headers = {'In-Reply-To': msgid})
+	mssg.send()
+	
+	return HttpResponseRedirect('/home/')
+	
 def archives(request):
 	'''
 	View for the archives
 	'''
-	return render_to_response('archives.html')
-
+	if request.method == 'POST': 
+		form = forms.ArchiveRenderer(request.user.email, request.POST)
+		if form.is_valid(): 
+			listname = form.cleaned_data['listnames']
+			to_date = form.cleaned_data['to_date']
+			from_date = form.cleaned_data['from_date']
+			
+			#print "\nLISTNAME",listname,"\nFROM",from_date,"\nTo_DATE",to_date
+			
+			mslist = MessageRender.getMessagesBasicAchive(listname, from_date, to_date)
+			
+			return render_to_response('archives.html', {'mslist':mslist}, context_instance=RequestContext(request))
+	else:
+        	form = forms.ArchiveRenderer(request.user.email) # An unbound form
+	
+	return render_to_response('archives.html', {'form': form}, context_instance=RequestContext(request))
 
 @login_required
 def lists(request):
@@ -244,6 +237,7 @@ def subscribe(request, fqdn_listname):
 	Subscribe to list with fqdn_listname = fqdn_listname
 	'''
 	success = mmclient.subscribe(request.user.email, fqdn_listname)
+	print ":: SUCCESS", success
 	return HttpResponseRedirect("/lists")
 
 @login_required
@@ -252,5 +246,6 @@ def unsubscribe(request, fqdn_listname):
 	Subscribe to list with fqdn_listname=fqdn_listname
 	'''
 	success = mmclient.unsubscribe(request.user.email, fqdn_listname)
+	print ":: SUCCESS", success
 	return HttpResponseRedirect("/lists")
 

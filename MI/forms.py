@@ -1,5 +1,6 @@
 from django import forms
 from mailclient.mmclient import getListOfLists
+from django.forms import extras
 
 class SignUp(forms.Form):
 	name = forms.CharField(label="Username", max_length=100, required=True)
@@ -43,8 +44,37 @@ class Compose(forms.Form):
 	subject = forms.CharField(max_length=100)
 	message = forms.CharField(widget=forms.Textarea)
 	
-class Reply(forms.Form):
-        
-	subject = forms.CharField(max_length=100)
-	message = forms.CharField(widget=forms.Textarea)
+class ArchiveRenderer(forms.Form):
+	'''
+	This form gets query parameters like listname and to-from dates
+	to render the archive messages
+	'''
 	
+	def __init__(self, email, *args, **kwargs):
+		super(ArchiveRenderer, self).__init__(*args, **kwargs)
+	
+		subscribed_lists, other_lists = getListOfLists(email)
+		CHOICES = ()
+		for lst in subscribed_lists:
+			#list name and list address
+			CHOICES = CHOICES + ((lst[1],lst[0]),)
+		
+		self.fields['listnames'] = forms.ChoiceField(choices=CHOICES)
+		self.fields.keyOrder = ['listnames', 'from_date', 'to_date']#,'order_by']
+        
+        #order_CHOICES = ()
+	from_date = forms.DateField(widget=extras.SelectDateWidget)
+	to_date = forms.DateField(widget=extras.SelectDateWidget)
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+

@@ -11,12 +11,12 @@
 	<!--This will later be looped over each recent message-->
 
 	{% for ms in mslist %}
-		<div class="message_single">
+		<div class="message_single" id="{{forloop.counter}}">
 
 		<!-- To be replaced with coloured buttons -->
 		<div class="msgbuttons">
-		<div class="replybutton"> <a href="#"> </a></div>
-		<div class="unsubscribebutton"> <a href="#"> </a></div>
+		<div class="replybutton"> <a href="javascript:toggle_visibility('{{ms.msgid}}');"> </a></div>
+		<div class="unsubscribebutton"> <a href="javascript:hide_me('{{forloop.counter}}')"> </a></div>
 		<div class="viewbutton"> <a href="{% url 'views.conversation' ms.threadid %}">  </a></div>
 		</div>
 		<!-- end of button list -->
@@ -29,12 +29,14 @@
 		<div class="msg"> {{ ms.msg|linebreaks }} </div>
 		<!-- End of message -->
 		
-		<!-- The reply-to form 
-		<div class="msgreply">
+		<!--The reply-to form -->
+		<!-- Div made visible by javascript using id = message_id -->
+		<div class="msgreply" id="{{ ms.msgid }}">
 		<textarea></textarea>
-		<a href=""> Send </a>
+		<!-- call reply view and send message with given parameters -->
+		<a href="javascript:send_reply('{{ms.subject}}','{{ms.msgid}}','{{ms.listname}}')"> Send </a>
 		</div>
-		End of reply-to form-->
+		<!--End of reply-to form-->
 		
 		</div>
 	{% endfor %}

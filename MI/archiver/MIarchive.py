@@ -33,21 +33,9 @@ class MIArchive:
         """See `IArchiver`."""
         
 	log.info("MI: Archive_message")
-	print "We got a new message"
+	print "\n\nWe got a new message"
 	
-	#keys = message.keys()
-	#print keys
-	'''
-	k1 = "Message-ID"
-	k2 = "In-Reply-To"
-	if k1 in keys:
-		print message[k1]
-	if k2 in keys:
-		print message[k2]
-	'''
 	try:
-		
-		print "Incoming Message"
 		#Temporary variables used in this function
 		msg_date=""
 		msg_body = ""
@@ -62,11 +50,25 @@ class MIArchive:
 					msg_body = msg_body + part.get_payload(decode=True)
 		except:
 			msg_date = datetime.date.today().strftime('%Y-%m-%d')
+
 		
 		# Get the Screen-name of the ID corresponding to this author
-		#try:
-		#	mmclient.getUserName(
-		
+		author_name=""
+		try:
+			email_id = message['From']
+			# If the email_id is of the form root<root@systers-dev.systers.org>, extract the actual emailid
+			if '<' in email_id and '>' in email_id:
+				pos1 = email_id.find('<')+1
+				pos2 = email_id.find('>')
+				email_id = email_id[pos1:pos2]
+			
+			author_name = mmclient.getUserName(email_id)
+
+		except Exception as ex:
+			log.info("MI:Exception", ex)
+			print ex
+			author_name = email_id
+					
 		# If the message is a reply, generate threadid
 		if 'In-Reply-To' in message.keys():
 			# Implies is a reply
@@ -78,12 +80,12 @@ class MIArchive:
 			log.info(temp.threadid)
 			print "THREAD ID:", temp.threadid
 			# Create MessageRenderer model object
-			msg = models.MessageRenderer(subject=message['Subject'], author=message['From'], date=msg_date,listname=mlist.fqdn_listname, msg=msg_body, msgid=message['Message-ID'], threadid=temp.threadid)
+			msg = models.MessageRenderer(subject=message['Subject'], author=author_name, date=msg_date,listname=mlist.fqdn_listname, msg=msg_body, msgid=message['Message-ID'], threadid=temp.threadid)
 		else:
 			log.info("ELSE")
 			# Is a new message. Use message-id as thread-id 
 			unique_id = message['Message-ID']
-			msg = models.MessageRenderer(subject=message['Subject'], author=message['From'], date=msg_date,listname=mlist.fqdn_listname, msg=msg_body, msgid=message['Message-ID'], threadid=unique_id)
+			msg = models.MessageRenderer(subject=message['Subject'], author=author_name, date=msg_date,listname=mlist.fqdn_listname, msg=msg_body, msgid=message['Message-ID'], threadid=unique_id)
 
 		# Save to DB
 		msg.save()

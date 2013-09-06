@@ -85,9 +85,11 @@ def getListOfLists(email):
 
 	for item in all_lists:
 		if item.list_id not in subscribed_list_ids:
-			other_lists.append([item.list_name, item.fqdn_listname])
+			desc = item.settings['description']
+			other_lists.append([item.list_name, item.fqdn_listname, desc])
 		else:
-			subscribed_lists.append([item.list_name, item.fqdn_listname])
+			desc = item.settings['description']
+			subscribed_lists.append([item.list_name, item.fqdn_listname, desc ])
 
 	return subscribed_lists, other_lists
 
@@ -95,29 +97,32 @@ def subscribe(email , fqdn_listname):
 	'''
 	subscribe user with email = email to list with fqdn_listname=fqdn_listname
 	'''
+	log.info("SUBSCRIBING TO LIST", fqdn_listname)
 	try:
 		#retreive user using email-id
 		user = client.get_user(email)
 		lst = client.get_list(fqdn_listname)
 		lst.subscribe(email, user.display_name)
+		print "SUBSCRIBERS:", lst.members
 		return True
-	except Exception:
+	except Exception as ex:
+		print ex
 		return False
 	
 def unsubscribe(email , fqdn_listname):
 	'''
 	subscribe user with email = email to list with fqdn_listname=fqdn_listname
 	'''
+	log.info("UNSUBSCRIBING FROM LIST", fqdn_listname)
 	try:
 		#retreive user using email-id
 		user = client.get_user(email)
-		print "USER", user
-		print "FQDN", fqdn_listname
 		lst = client.get_list(fqdn_listname)
-		print "LST", lst
+		print "SUBSCRIBERS:", lst.members
 		lst.unsubscribe(email)
 		return True
-	except Exception:
+	except Exception as ex:
+		print ex
 		return False
 
 # Add mailman.client to path if it doesn't already exist

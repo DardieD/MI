@@ -14,6 +14,14 @@
 			<div class="msg"> {{ ms.msg|linebreaks }} </div>
 			</div>
 		{% endfor %}
+		
+		<!--The reply-to form -->
+		<div class="message_single" id="{{ mslist.0.msgid }}">
+		<textarea></textarea>
+		<!-- call reply view and send message with given parameters -->
+		<a href="javascript:send_reply('{{mslist.0.subject}}','{{mslist.0.msgid}}','{{mslist.0.listname}}');"> Send </a>
+		</div>
+		<!--End of reply-to form-->
 	
 	{% else %}
 	<!-- If an unaunthenticated user has creepd in-->

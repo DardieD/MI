@@ -1,8 +1,9 @@
+'''
 from sys import path
 p = "/vagrant/MI/"
 if p not in path:
 	path.append(p)
-
+'''
 import os 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "MI.settings")
 
@@ -16,12 +17,10 @@ class MessageRenderer(models.Model):
 	listname = models.CharField(max_length=50)
 	msg = models.TextField()
 	msgid = models.CharField(max_length=100)
-	threadid = models.CharField(max_length = 10, unique=False) #blank=True,
+	threadid = models.CharField(max_length = 10, unique=False) 
 	
 
 	def __unicode__(self):
 		return u"%s \n %s\n %s\n %s\n %s\n %s" % (self.subject, self.author, self.date, self.listname, self.msg, self.msgid)
 
-	#class Meta:
-		#app_label = 'MI'
 		
