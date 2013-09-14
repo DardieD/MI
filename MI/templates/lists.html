@@ -10,7 +10,7 @@
 	<div class="list-container">
 	<ul>	
 		{% for item in subscribed_lists %}		
-		<div class="subscribed_list">
+		<div class="subscribed_list" class="box">
 		
 		<a href="{% url 'views.unsubscribe' item.1 %}">  </a>
 		<!-- get first item from list i.e. list_name -->
@@ -24,7 +24,7 @@
 	Other lists:
 	<ul>	
 		{% for item in other_lists %}		
-		<div class="unsubscribed_list">
+		<div class="unsubscribed_list" class="box">
 		
 		<a href="{% url 'views.subscribe' item.1 %}">  </a>
 		<!-- get first item from list i.e. list_name -->

@@ -46,7 +46,6 @@ class MIArchive:
 			# To get the body from multipart messages
 			for part in message.walk():
 				if part.get_content_type():
-					print part.get_content_type()
 					msg_body = msg_body + part.get_payload(decode=True)
 		except:
 			msg_date = datetime.date.today().strftime('%Y-%m-%d')
@@ -54,6 +53,7 @@ class MIArchive:
 		
 		# Get the Screen-name of the ID corresponding to this author
 		author_name=""
+		author_email=""
 		try:
 			email_id = message['From']
 			# If the email_id is of the form root<root@systers-dev.systers.org>, extract the actual emailid
@@ -61,7 +61,8 @@ class MIArchive:
 				pos1 = email_id.find('<')+1
 				pos2 = email_id.find('>')
 				email_id = email_id[pos1:pos2]
-			
+				
+			author_email = email_id
 			author_name = mmclient.getUserName(email_id)
 
 		except Exception as ex:
@@ -78,14 +79,14 @@ class MIArchive:
 			replied_to = message['In-Reply-To']
 			temp = models.MessageRenderer.objects.filter(msgid=replied_to)[0]
 			log.info(temp.threadid)
-			print "THREAD ID:", temp.threadid
+			print "This was a reply to ->THREAD ID:", temp.threadid
 			# Create MessageRenderer model object
-			msg = models.MessageRenderer(subject=message['Subject'], author=author_name, date=msg_date,listname=mlist.fqdn_listname, msg=msg_body, msgid=message['Message-ID'], threadid=temp.threadid)
+			msg = models.MessageRenderer(subject=message['Subject'], email=author_email, author=author_name, date=msg_date,listname=mlist.fqdn_listname, msg=msg_body, msgid=message['Message-ID'], threadid=temp.threadid)
 		else:
 			log.info("ELSE")
 			# Is a new message. Use message-id as thread-id 
 			unique_id = message['Message-ID']
-			msg = models.MessageRenderer(subject=message['Subject'], author=author_name, date=msg_date,listname=mlist.fqdn_listname, msg=msg_body, msgid=message['Message-ID'], threadid=unique_id)
+			msg = models.MessageRenderer(subject=message['Subject'], email=author_email, author=author_name, date=msg_date,listname=mlist.fqdn_listname, msg=msg_body, msgid=message['Message-ID'], threadid=unique_id)
 
 		# Save to DB
 		msg.save()

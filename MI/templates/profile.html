@@ -5,16 +5,33 @@
 	<div class="profile">
 	<img src="{{ gurl }}"/>
 	
-	<a href="#"> Change Password </a>
-	<a href="#"> Delete User </a>
+	<a href="javascript:toggle_visibility('changepwd');"> Change Password </a>
+	<a href="{% url 'views.useraway' %}"> Change Status </a>
 	</div>
+	
+	
 	
 	<div class="profile_form">
 	
-	<form name="profile" autocomplete="on" method="post">{% csrf_token %}
-	{{ form.as_p }}
+		<div class="user_status"> <label> USER STATUS: </label> {{ status }} </div>
 	
-	<input type="submit" value="Update">
-	</form>
+		{% if form %}
+			<form name="profile" autocomplete="on" method="post">{% csrf_token %}
+				{{ form.as_p }}
+				<input type="submit" value="Update">
+			</form>
+		{%endif%}
 	</div>
+	
+	
+	{% if pwdform %}
+		<div class="profile_form" >
+			<form name="pwdform" action="/changepwd/" method="post" class="invisible" id="changepwd">{% csrf_token %}
+				{{ pwdform.as_p }}
+				<input type="submit" value="Update" onclick="return checkpwd();">
+			</form>
+		</div>
+	{%endif%}
+	
 {% endblock %}
+

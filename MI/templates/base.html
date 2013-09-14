@@ -19,7 +19,7 @@
 	</ul>
 	</div>
 
-	<img src="{% static 'MemberInterface/img/sample_logo.jpg' %}" alt="Sample Logo"/>
+	<a href="{% url 'views.welcome'%}"><img src="{% static 'MemberInterface/img/sample_logo.jpg' %}" alt="Sample Logo"/></a>
 	<h1> Organization name </h1>
 	
 </div><!-- end of header -->
@@ -27,6 +27,7 @@
 	{% block navigation %}
 	<ul>
 	<li> <a href="{% url 'views.home' %}"> Home </a> </li>
+	<li> <a href="{% url 'views.compose' %}"> Compose </a> </li>
 	<li> <a href="{% url 'views.lists' %}">List Options </a> </li>
 	<li> <a href="{% url 'views.archives' %}">Archives </a> </li>
 	<!-- <li> <a href="#">Favourites </a> </li> -->
@@ -42,15 +43,24 @@
 	{% endblock %}
 </div> <!-- end of navbar -->
 <div id="gotop">
-<a href="#header">Top</a>
+<a href="#header"><img src="{% static 'MemberInterface/img/top.png' %}" alt="Sample Logo"/></a>
 </div>
 <div id="content"> 
 
+	{% if messages %}
+	<ul class="messages">
+	    {% for message in messages %}
+	    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+	    {% endfor %}
+	</ul>
+	{% endif %}
+	
 	{% block content %} 
-
+	<!-- Page Content Here -->
 	{% endblock %}
 
 </div> <!-- end of content -->
+
 <div id="footer"> 
 A Systers-GSOC'13 Project
 

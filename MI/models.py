@@ -12,7 +12,8 @@ import uuid
 
 class MessageRenderer(models.Model):
 	subject = models.CharField(max_length=100)
-	author = models.EmailField(max_length=100)
+	author = models.CharField(max_length=100)
+	email = models.EmailField(max_length=100)
 	date = models.DateField()
 	listname = models.CharField(max_length=50)
 	msg = models.TextField()
@@ -23,4 +24,4 @@ class MessageRenderer(models.Model):
 	def __unicode__(self):
 		return u"%s \n %s\n %s\n %s\n %s\n %s" % (self.subject, self.author, self.date, self.listname, self.msg, self.msgid)
 
-		
+

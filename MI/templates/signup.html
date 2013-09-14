@@ -2,17 +2,16 @@
 
 	{% block content %} 
 
+	{% if messages %}
+	<ul class="messages">
+	    {% for message in messages %}
+	    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+	    {% endfor %}
+	</ul>
+	{% endif %}
 	
 	<h3> Sign Up </h3>
-	<!--
-	<form name="login" autocomplete="on">
-	Email ID: <input type="email" name="email"><br>
-	Password: <input type="password" name="pwd"><br>
-	Additional form fields to be added
-	<input type="submit" value="SignUp">
-	</form>
-	-->
-
+	
 	<form action="/newuser/" method="post">{% csrf_token %}
 	{{ form.as_p }}
 	<input type="submit" value="Submit" />

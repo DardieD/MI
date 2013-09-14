@@ -3,8 +3,22 @@ from mock import patch
 from pickle import dumps
 from sys import path
 
+from django.contrib.auth.models import User
+
 import logging
 log = logging.getLogger('mailman.error')
+
+def createUser(username, email, password):
+	'''
+	Create New user in the mailman system 
+	IF the user doesn't already exist 
+	'''
+	try:
+		client.get_user(email)
+		
+	except Exception as ex:
+		log.info("USER DOESNT EXIST IN MM, CREATE")
+		client.create_user(email=email, password=password, display_name=username)
 
 def getUserName(email):
 	'''
@@ -21,17 +35,51 @@ def getUserPreferences(email):
 	'''
 	return dictionary of user's preferences
 	'''
-	user = client.get_user(email)
-	return user.preferences
-
-def getProfileDetails(email):
+	try:
+		user = client.get_user(email)
+		return user.preferences
+		
+	except Exception as ex:
+		log.error("USER NOT FOUND:", ex)
+		#Fall Back to Global Preferences
+		return client.preferences
+		
+def setUserPreferences(email, prefs):
 	'''
-	return dictionary of user profile details as a list of display_name,email elements
-	The first name-email pair belongs to user.display_name and the id used to create the object
-	Subsequent elements are derived from user.addresses 
+	return dictionary of user's preferences
 	'''
 	try:
-		#print "THE EMAIL IS", email
+		user = client.get_user(email)
+		original_prefs = user.preferences
+		print user
+		print prefs
+		user.preferences['acknowledge_posts'] = prefs['acknowledge_posts']
+		user.preferences['delivery_mode'] = prefs['delivery_mode']
+		user.preferences['delivery_status'] = prefs['delivery_status']
+		user.preferences['hide_address'] = prefs['hide_address']
+		user.preferences['preferred_language'] = prefs['preferred_language']
+		user.preferences['receive_list_copy'] = prefs['receive_list_copy']
+		user.preferences['receive_own_postings'] = prefs['receive_own_postings']
+		
+		user.save()
+		print client.get_user(email).preferences
+		
+		return "Preferences Changed Successfully"
+		
+	except Exception as ex:
+		log.error("UNABLE TO CHANGE PREFERENCES:",ex)
+		#Fall Back to Global Preferences
+		return "An Error Occured in mmclient:setUserPreferences ", ex
+		
+		
+'''
+def getProfileDetails(email):
+	
+	#Return dictionary of user profile details as a list of display_name,email elements
+	#The first name-email pair belongs to user.display_name and the id used to create the object
+	#Subsequent elements are derived from user.addresses 
+	
+	try:
 		name_email_list = []
 		user = client.get_user(email)
 		name_email_list.append({'display_name':user.display_name,'email':email})
@@ -53,7 +101,62 @@ def getProfileDetails(email):
 		print ex
 		#log.error("MMClient getProfileDetails: Client doesn't exist")
 		return []
+'''
+
+def getProfileDetails(email):
+	'''
+	Return dictionary of user profile details as a list of display_name,email elements
+	The first name-email pair belongs to user.display_name and the id used to create the object
+	Subsequent elements are derived from user.addresses 
+	'''
+	try:
+		user = client.get_user(email)
+		name_email_list = {'display_name':user.display_name,'email':email}
+		return name_email_list
+		
+	except Exception as ex:
+		print ex
+		return {'display_name':'ERROR', 'email':'ERROR'}
+
+
 	
+def setProfileDetails(email, profile_details):
+	'''
+	Set the profile name provided as a dictionary
+	'''
+	try:
+
+		user = client.get_user(email)
+		print user
+		old_name = user.display_name
+		user.display_name = profile_details['display_name']
+		user.save()
+		return "Profile Details Successfully Set"			
+	except Exception as ex:
+		return "An error occured in mmclient: ", ex
+			
+def changePwd(email, pwd):
+	'''
+	Change the user's password
+	both in mailman
+	and in the system
+	'''
+	try:
+		#Changin password in mm system
+		user = client.get_user(email)
+		print user
+		user.password = pwd
+		user.save()
+		
+		#Changing password in MI
+		u = User.objects.get(email__exact=email)
+		u.set_password(pwd)
+		u.save()
+		return "Your password was successfully changed"	
+			
+	except Exception as ex:
+		return "An error occured in mmclient:changePwd ", ex
+
 def getListOfLists(email):
 	'''
 	Get all available lists for a client
@@ -129,8 +232,13 @@ def unsubscribe(email , fqdn_listname):
 MM_PATH = '/root/mailman.client/src/'
 if not MM_PATH in path:
     path.append(MM_PATH)
+    path.append('/vagrant/MI/MI')
+
 
 #Create Client object
 from mailmanclient import Client
-client = Client('http://127.0.0.1:8001/3.0','restadmin','restpass')
+from config import config
+
+client_details = config.getRestConfig()
+client = Client(client_details[0],client_details[1],client_details[2])
 

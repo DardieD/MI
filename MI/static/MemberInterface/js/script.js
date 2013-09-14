@@ -43,6 +43,22 @@ function send_reply(subject, msgid, rec){
 	}
 }
 
+//Check the new passwords match
+function checkpwd(){
+	
+	newpwd = document.getElementById('id_new_pwd').value;
+	newpwd_again = document.getElementById('id_new_pwd_again').value;
+	if(newpwd.localeCompare(newpwd_again)==0){
+		//Both Passwords match
+		return true;
+	}
+	else{
+		//Passwords Do not match
+		alert ("Passwords Do Not Match");
+		return false;
+	}	
+
+}
 
 
 

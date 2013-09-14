@@ -2,6 +2,14 @@ from MI import models
 from MI.mailclient import mmclient
 from django.db.models import F
 
+def updateScreenname(old_name, new_name):
+	'''
+	Change all occurances of author to 
+	New_Name in the database
+	'''
+	msg = models.MessageRenderer.objects.filter(author=old_name).update(author=new_name)
+	return msg
+
 def getLatestMessages(email, n=10):
 	'''
 	Get the latest (last n) messages to the lists
@@ -10,7 +18,8 @@ def getLatestMessages(email, n=10):
 	try:
 		subscribed_lists, other_lists = mmclient.getListOfLists(email)
 		subscribed_lists = [row[1] for row in subscribed_lists]
-	except:
+	except Exception as ex:
+		print ex
 		return []
 	message_list = models.MessageRenderer.objects.filter(listname__in=subscribed_lists).order_by('pk').reverse()[:n]
 	
@@ -33,16 +42,6 @@ def getMessageByThreadID(threadid):
 	print "Message List generated for threadid ", threadid 
 	print "Message List length: ", len(message_list)
 	return message_list
-	
-def getMessagesByDate(from_date, to_date):
-	'''
-	'''
-	return []
-	
-def getMessagesByAuthor():
-	'''
-	'''
-	return []
 	
 def getMessagesBasicAchive(listname, from_date,to_date):
 	'''

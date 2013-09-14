@@ -17,9 +17,12 @@
 		
 		<!--The reply-to form -->
 		<div class="message_single" id="{{ mslist.0.msgid }}">
+		<div class="msgdate"> Today </div>
+		<div class="msgauthor"> You said:  </div> 
 		<textarea></textarea>
 		<!-- call reply view and send message with given parameters -->
-		<a href="javascript:send_reply('{{mslist.0.subject}}','{{mslist.0.msgid}}','{{mslist.0.listname}}');"> Send </a>
+		<!--<a href="javascript:send_reply('{{mslist.0.subject}}','{{mslist.0.msgid}}','{{mslist.0.listname}}');"> Send </a>-->
+		<button type="button" onclick="javascript:send_reply('{{mslist.0.subject}}','{{mslist.0.msgid}}','{{mslist.0.listname}}');"> Send </button>
 		</div>
 		<!--End of reply-to form-->
 	

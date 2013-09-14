@@ -21,7 +21,12 @@ urlpatterns = patterns('',
 	(r'^lists/$', views.lists),
 	(r'^subscribe/(.+)/$', views.subscribe),
 	(r'^unsubscribe/(.+)/$', views.unsubscribe),
+	
+	(r'^publicprofile/(.+)/$', views.publicprofile),
 	(r'^profile/$', views.profile),
+	(r'^useraway/$', views.useraway),
+	(r'^changepwd/$', views.changepwd),
+	
 	(r'^preferences/$',views.preferences),
 	(r'^newuser/$', views.newuser),
 	(r'^thanks/$', views.thanks),

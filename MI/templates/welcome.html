@@ -1,15 +1,19 @@
 {% extends "base.html" %}
 
 {% block navigation %}
+<!--
 <ul>
 	<li> <a href="{% url 'views.welcome' %}"> Home </a> </li>
-	<!-- <li> <a href="#"> News </a> </li> -->
+	<li> <a href="#"> News </a> </li>
 	<li> <a href="#"> Contact</a> </li>
+</ul>
+-->
 {% endblock %}
 
 
 	{% block content %} 
 
+	{% if form %}
 	<div class="rightbar">
 		<h3> Login/Signup </h3>
 		<!-- print error message, if any -->
@@ -23,6 +27,8 @@
 
 		<a href="{% url 'views.newuser' %}"> New User ? Sign Up </a>
 	</div>
+	{%endif%}
+	
 
 	<h2> Welcome </h2>
 	<p>
