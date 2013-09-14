@@ -1,9 +1,3 @@
-'''
-from sys import path
-p = "/vagrant/MI/"
-if p not in path:
-	path.append(p)
-'''
 import os 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "MI.settings")
 

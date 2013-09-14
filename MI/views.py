@@ -45,8 +45,6 @@ def welcome(request):
 				# Redirect to a success page.
 				return HttpResponseRedirect("/home/")
 			else:
-				print "User is not none", user is not None
-				print "user is active", user.is_active
 				# Show an error page
 				messages.error(request, "Invalid Login Credentials")
 				return HttpResponseRedirect("/")
@@ -143,7 +141,7 @@ def archives(request):
 			mslist = MessageRenderer.getMessagesBasicAchive(listname, from_date, to_date)
 			
 			if not mslist:
-				print "MSLIST IS NONE"
+				#MSLIST is empty
 				messages.error(request, "No messages for "+ listname +  " list from " + str(from_date) + " to " + str(to_date))
 			return render_to_response('archives.html', {'mslist':mslist}, context_instance=RequestContext(request))
 	else:
@@ -350,4 +348,19 @@ def unsubscribe(request, fqdn_listname):
 	return HttpResponseRedirect("/lists")
 	
 
+def sample_message(request):
+	'''
+	Add Sample emails to list
+	'''
+	s="Sample Message"
+	e = "root@systers-dev.systers.org"
+	a = mmclient.getUserName(e)
+	d = '2013-01-01'
+	l = 'test@systers-dev.systers.org'
+	b = 'This is another sample message for test purposes'
+	i = '123456'
 
+	msg = models.MIMessage(subject=s, email=e, author=a, date=d, listname=l, msg=b, msgid=i, threadid=i)
+	msg.save()
+	
+	return HttpResponseRedirect("/home")

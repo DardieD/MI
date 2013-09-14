@@ -77,16 +77,16 @@ class MIArchive:
 			# Get threadid of message replied to
 			# Assign this thread id to current message
 			replied_to = message['In-Reply-To']
-			temp = models.MessageRenderer.objects.filter(msgid=replied_to)[0]
+			temp = models.MIMessage.objects.filter(msgid=replied_to)[0]
 			log.info(temp.threadid)
 			print "This was a reply to ->THREAD ID:", temp.threadid
 			# Create MessageRenderer model object
-			msg = models.MessageRenderer(subject=message['Subject'], email=author_email, author=author_name, date=msg_date,listname=mlist.fqdn_listname, msg=msg_body, msgid=message['Message-ID'], threadid=temp.threadid)
+			msg = models.MIMessage(subject=message['Subject'], email=author_email, author=author_name, date=msg_date,listname=mlist.fqdn_listname, msg=msg_body, msgid=message['Message-ID'], threadid=temp.threadid)
 		else:
 			log.info("ELSE")
 			# Is a new message. Use message-id as thread-id 
 			unique_id = message['Message-ID']
-			msg = models.MessageRenderer(subject=message['Subject'], email=author_email, author=author_name, date=msg_date,listname=mlist.fqdn_listname, msg=msg_body, msgid=message['Message-ID'], threadid=unique_id)
+			msg = models.MIMessage(subject=message['Subject'], email=author_email, author=author_name, date=msg_date,listname=mlist.fqdn_listname, msg=msg_body, msgid=message['Message-ID'], threadid=unique_id)
 
 		# Save to DB
 		msg.save()

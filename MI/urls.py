@@ -29,6 +29,8 @@ urlpatterns = patterns('',
 	
 	(r'^preferences/$',views.preferences),
 	(r'^newuser/$', views.newuser),
+
+	(r'^sample/$', views.sample_message),
 	(r'^thanks/$', views.thanks),
 	(r'^logout/$',views.logout),
 	(r'^admin/', include(admin.site.urls)),

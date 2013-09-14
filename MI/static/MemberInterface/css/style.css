@@ -408,8 +408,7 @@ text-decoration: none;
 }
 
 .rightbar a:hover{
-color: white;
-background-color: black;
+text-decoration: underline;
 }
 
 /* CSS for login form */
