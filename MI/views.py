@@ -12,7 +12,7 @@ from django.contrib import messages
 from mailclient import mmclient
 from Message import Message
 from MI import models
-from MI.view import MessageRender
+from MI.view import MessageRenderer
 import forms
 
 from sqlite3 import IntegrityError
@@ -25,6 +25,10 @@ def welcome(request):
 	Welcome is a public screen that shows static information 
 	that may be displayed as well as the login and signup forms. 
 	'''
+	#If user is already logged in, redirect to homescreen
+	if request.user.is_authenticated():
+		return HttpResponseRedirect("/home")
+	
 	# LOGIN Form
 	# If login form is already submitted
 	if request.method == 'POST': 
@@ -59,7 +63,7 @@ def home(request):
 	
 	if request.user.is_authenticated():
 		# Filter messages for user 
-		mslist = MessageRender.getLatestMessages(request.user.email)
+		mslist = MessageRenderer.getLatestMessages(request.user.email)
 		return render_to_response('home.html', {'mslist':mslist}, context_instance=RequestContext(request))
 	else:
 		return render_to_response('welcome.html',context_instance=RequestContext(request))
@@ -72,7 +76,7 @@ def conversation(request, threadid):
 	
 	if request.user.is_authenticated():
 		# Get all messages in the conversation
-		mslist = MessageRender.getMessageByThreadID(threadid)
+		mslist = MessageRenderer.getMessageByThreadID(threadid)
 		return render_to_response('view_conversation.html', {'mslist':mslist}, context_instance=RequestContext(request))
 	else:
 		return render_to_response('welcome.html',context_instance=RequestContext(request))
@@ -136,7 +140,7 @@ def archives(request):
 			
 			#print "\nLISTNAME",listname,"\nFROM",from_date,"\nTo_DATE",to_date
 			
-			mslist = MessageRender.getMessagesBasicAchive(listname, from_date, to_date)
+			mslist = MessageRenderer.getMessagesBasicAchive(listname, from_date, to_date)
 			
 			if not mslist:
 				print "MSLIST IS NONE"
@@ -223,7 +227,7 @@ def profile(request):
 			msg = mmclient.setProfileDetails(email, form.cleaned_data)
 			messages.info(request, msg)
 			#Change all occurances of old_name to new_name in the db
-			msg = MessageRender.updateScreenname(old_name,form.cleaned_data['display_name'])
+			msg = MessageRenderer.updateScreenname(old_name,form.cleaned_data['display_name'])
 
 		return HttpResponseRedirect("/profile")
 	else:
