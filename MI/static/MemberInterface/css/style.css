@@ -1,8 +1,27 @@
 body{
 color: black;
+background-color: white;
+min-height: 100%;
 /*border: 1px solid black;*/
 }
 
+a{color:blue;} 
+a:link {color:blue;}   
+a:visited {color:blue;}
+a:hover {color:blue;}  
+a:active {color:blue;}  
+
+table{}
+
+tr{}
+
+th, td{
+padding: 5px 10px;
+}
+
+ul{
+list-style-type: none;
+}
 /** CONTAINER**/
 #container{
 /*border: 1px solid black;*/
@@ -84,13 +103,14 @@ margin: 0px;
 padding: 0px;
 }
 #navbar li{
-width: 200px;
+width: 160px;
 height: 30px;
 margin: 0px;
 padding: 0px;
 display: inline-block;
 list-style: none;
 text-align: center;
+background-color: white;
 }
 
 #navbar li > ul{
@@ -105,6 +125,7 @@ display: block;
 #navbar li:hover li{
 text-align: left;
 display: block;
+padding-left: 5px;
 }
 
 #navbar a{
@@ -224,13 +245,13 @@ border-radius: 20px;
 }
 
 /* DJANGO ERRORLIST */
-.errorlist ul{
+ul.errorlist {
 list-style-type: none;
 background-color: #FFCCCC;
 border: 1px solid red;
 }
 
-.errorlist ul li{
+.errorlist li{
 color: red;
 }
 
@@ -238,9 +259,15 @@ color: red;
 .messages{
 display: block;
 max-width: 100%;
-padding:2px 5px 2px 5px;
-border: 1px solid black;
+padding:15px;
+border: 1px solid #FFD000;
 list-style-type: none;
+background-color: #FFF6CC; 
+
+-moz-border-radius: 20px;
+-webkit-border-radius: 20px;
+-khtml-border-radius: 20px;
+border-radius: 20px;
 }
 
 .messages .error{
@@ -252,10 +279,9 @@ color: green;
 }
 
 /* Single Message Style*/
-
 .message_single{
 border: 1px solid black;
-padding: 5px;
+padding: 5px 10px;
 margin: 5px;
 overflow:hidden;
 
@@ -283,9 +309,7 @@ min-height: 100px;
 }
 
 .message_single button{
-margin-left: auto;
-margin-right: auto;
-width: 70%;
+margin: 0px auto 15px auto;
 }
 
 .msglistname{
@@ -311,15 +335,12 @@ font-size: 12px;
 }
 
 .msgbuttons{
-float: right;
-
-
-    
+float: right;  
 }
 
 .replybutton{
 background: green;
-margin: 1px;
+margin: 3px;
 color: green;
 width: 25px;
 height: 25px;
@@ -330,7 +351,6 @@ clear:both;
 -webkit-border-radius: 20px;
 -khtml-border-radius: 20px;
 border-radius: 20px;
-
 }
 
 .replybutton a{
@@ -342,7 +362,7 @@ display:block;
 
 .unsubscribebutton{
 background: red;
-margin: 1px;
+margin: 3px;
 color: red;
 width: 25px;
 height: 25px;
@@ -366,7 +386,7 @@ display:block;
 
 .viewbutton{
 background: blue;
-margin: 1px;
+margin: 3px;
 color: blue;
 width: 25px;
 height: 25px;
@@ -380,6 +400,28 @@ border-radius: 20px;
 }
 
 .viewbutton a{
+width: 25px;
+height: 25px;
+text-decoration:none;
+display:block;
+}
+
+.favoritebutton{
+background: #FFD000;
+margin: 3px;
+color: #FFD000;
+width: 25px;
+height: 25px;
+float: right;
+clear:both;
+
+-moz-border-radius: 20px;
+-webkit-border-radius: 20px;
+-khtml-border-radius: 20px;
+border-radius: 20px;
+}
+
+.favoritebutton a{
 width: 25px;
 height: 25px;
 text-decoration:none;
@@ -598,8 +640,9 @@ display: block;
 /*border: 1px solid black;*/
 font-size: 8pt;
 text-align: center;
-margin: 20px;
 padding: 5px;
-bottom:0;
+
+position: relative;
 clear: both;
+margin: 20px;
 }

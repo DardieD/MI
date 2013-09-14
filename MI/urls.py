@@ -16,6 +16,9 @@ urlpatterns = patterns('',
 	(r'^reply/(?P<subject>.+)/(?P<msgid>.+)/(?P<rec>.+)/(?P<message>.+)$', views.reply),
 	
 	(r'^archives/$', views.archives),
+	(r'^favorites/$', views.favorites),
+	(r'^addfavorites/(.+)$', views.addfavorites),
+	(r'^removefavorites/(.+)$', views.removefavorites),
 	
 	
 	(r'^lists/$', views.lists),
@@ -33,6 +36,7 @@ urlpatterns = patterns('',
 	(r'^sample/$', views.sample_message),
 	(r'^thanks/$', views.thanks),
 	(r'^logout/$',views.logout),
+	
 	(r'^admin/', include(admin.site.urls)),
 )
 

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+	{% block content %} 
+	
+	{% if mslist %}
+		
+		{% for ms in mslist %}
+		<div class="message_single" id="{{forloop.counter}}">
+
+		<!-- Message Buttons -->
+		<div class="msgbuttons">
+		<td><div class="unsubscribebutton"> <a href="{% url 'views.removefavorites' ms.msgid %}"> </a></div></td>
+		<div class="viewbutton"> <a href="{% url 'views.conversation' ms.threadid %}">  </a></div>
+		</div>
+		<!-- end of button list -->
+
+		<!-- The message -->
+		<div class="msglistname"> {{ ms.listname }} </div>
+		<div class="msgdate"> {{ ms.date }} </div>
+		<div class="msgsubject"> {{ ms.subject }} </div>
+		<div class="msgauthor"> <a href="{% url 'views.publicprofile' ms.email %}">{{ ms.author}}</a> said:  </div> 
+		<div class="msg"> {{ ms.msg|linebreaks }} </div>
+		<!-- End of message -->		
+		</div>
+	{% endfor %}
+	<!--end of all messages-->
+	
+	{%endif%}
+	
+	{% endblock %}

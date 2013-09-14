@@ -6,6 +6,7 @@
 	render list as dropdown
 	render buttons for subscribe/unsubscribe
 -->
+
 	You are subscribed to:
 	<div class="list-container">
 	<ul>	
@@ -22,9 +23,12 @@
 	</ul>
 	
 	Other lists:
+	{% if not other_lists%}
+	<ul><li>You have subscribed to all our lists </li></ul>
+	{%endif%}
 	<ul>	
 		{% for item in other_lists %}		
-		<div class="unsubscribed_list" class="box">
+		<div class="unsubscribed_list">
 		
 		<a href="{% url 'views.subscribe' item.1 %}">  </a>
 		<!-- get first item from list i.e. list_name -->

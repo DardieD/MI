@@ -15,7 +15,7 @@
 	<ul>
 	<li> <a href="#"> Link 1 </a> </li>
 	<li> <a href="#"> Link 2 </a> </li>
-	<li> <a href="{% url 'views.sample_message' %}"> Link 3 </a> </li>
+	<li> <a href="#"> Link 3 </a> </li>
 	</ul>
 	</div>
 
@@ -30,6 +30,7 @@
 	<li> <a href="{% url 'views.compose' %}"> Compose </a> </li>
 	<li> <a href="{% url 'views.lists' %}">List Options </a> </li>
 	<li> <a href="{% url 'views.archives' %}">Archives </a> </li>
+	<li> <a href="{% url 'views.favorites' %}">Favorites </a> </li>
 	<!-- <li> <a href="#">Favourites </a> </li> -->
 	<li> <a href="#">Settings </a> 
 		<ul>
@@ -37,7 +38,7 @@
 		<li> <a href="{% url 'views.preferences' %}">Preferences </a> </li>
 		<li> <a href="{% url 'views.logout' %}">Logout </a> </li>
 		</ul>
-		</li>
+	</li>
 		
 	</ul>
 	{% endblock %}
@@ -47,6 +48,7 @@
 </div>
 <div id="content"> 
 
+	<!-- Display Custom Error Messages Here -->
 	{% if messages %}
 	<ul class="messages">
 	    {% for message in messages %}

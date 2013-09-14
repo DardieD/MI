@@ -5,29 +5,22 @@ from django.forms import extras
 from validators import validators
 
 class SignUp(forms.Form):
+	'''
+	SignUp Form
+	'''
 	name = forms.CharField(label="Username", max_length=100, required=True)
 	email = forms.EmailField(label="Email ID", required=True, validators=[validators.validate_email_unique])
 	pwd = forms.CharField(label="Password",widget=forms.PasswordInput, required=True)
 	essay = forms.CharField(widget=forms.Textarea, max_length=800, required=True)	
 
 class Login(forms.Form):
+	'''
+	'''
 	username = forms.CharField(label="Username", required=True)
 	password = forms.CharField(widget=forms.PasswordInput, required=True)
 
 class Profile(forms.Form):
 	'''
-	def __init__(self, profile_details, *args, **kwargs):
-		super(Profile, self).__init__(*args, **kwargs)
-		
-		for i,pair in enumerate(profile_details):
-			d_name = "display_name" + str(i)
-			e_name = "email" + str(i)
-			self.fields[d_name] = forms.CharField(label="Name", required=False, initial= pair['display_name'])
-			self.fields[e_name] = forms.EmailField(label="Email ID", required=False, initial=pair['email'])
-        	
-        	
-        	self.fields['display_name'] = forms.CharField(label="Name", required=False, initial= profile_details['display_name'])
-        	self.fields['email'] = forms.EmailField(label="Email ID", required=False, initial=profile_details['email'])
 	'''
 	display_name = forms.CharField(label="Screen Name", max_length=100, required=True)
 	#email = forms.EmailField(label="Email ID", required=True)

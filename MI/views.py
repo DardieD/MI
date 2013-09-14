@@ -10,9 +10,8 @@ from django.core.mail import EmailMessage
 from django.contrib import messages
 
 from mailclient import mmclient
-from Message import Message
 from MI import models
-from MI.view import MessageRenderer
+from MI.view import MessageRenderer, FavoriteRenderer
 import forms
 
 from sqlite3 import IntegrityError
@@ -116,9 +115,11 @@ def reply(request, subject, msgid, rec, message):
 	recipient.append(rec)
 	
 	# If Re: not in the subject line, append "Re:"	
-	if "Re:" not in subject:
+	if "Re:" not in subject and '[' in subject:
 		splits = subject.split(']',1);
 		subject = splits[0] + "] Re: " + splits[1]
+	else:
+		subject = "Re: " + subject
 	
 	mssg = EmailMessage(subject,message,sender,recipient,  headers = {'In-Reply-To': msgid})
 	print "MEssage Sent", mssg.send()
@@ -149,6 +150,36 @@ def archives(request):
 	
 	return render_to_response('archives.html', {'form': form}, context_instance=RequestContext(request))
 
+@login_required
+def favorites(request):
+	'''
+	Accessing favorites list
+	'''
+	mslist = FavoriteRenderer.getFavorites(request.user.email)
+	return render_to_response('favorites.html', {'mslist': mslist}, context_instance=RequestContext(request))
+
+@login_required
+def addfavorites(request, msgid):
+	'''
+	Adding to and accessing favorites list
+	'''
+	msg = FavoriteRenderer.addToFavorites(request.user.email, msgid)
+	messages.info(request, msg)
+	mslist = FavoriteRenderer.getFavorites(request.user.email)
+	return HttpResponseRedirect('/home')
+
+	
+@login_required
+def removefavorites(request, msgid):
+	'''
+	Removing from favorites list
+	'''
+	msg = FavoriteRenderer.removeFromFavorites(request.user.email, msgid)
+	messages.info(request, msg)
+	mslist = FavoriteRenderer.getFavorites(request.user.email)
+	#return HttpResponseRedirect('/home')
+	return render_to_response('favorites.html', {'mslist': mslist}, context_instance=RequestContext(request))
+	
 @login_required
 def lists(request):
 	'''
@@ -346,7 +377,7 @@ def unsubscribe(request, fqdn_listname):
 	success = mmclient.unsubscribe(request.user.email, fqdn_listname)
 	print ":: SUCCESS", success
 	return HttpResponseRedirect("/lists")
-	
+
 
 def sample_message(request):
 	'''
@@ -358,7 +389,7 @@ def sample_message(request):
 	d = '2013-01-01'
 	l = 'test@systers-dev.systers.org'
 	b = 'This is another sample message for test purposes'
-	i = '123456'
+	i = '1d23f456'
 
 	msg = models.MIMessage(subject=s, email=e, author=a, date=d, listname=l, msg=b, msgid=i, threadid=i)
 	msg.save()

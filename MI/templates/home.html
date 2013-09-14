@@ -12,11 +12,12 @@
 	{% for ms in mslist %}
 		<div class="message_single" id="{{forloop.counter}}">
 
-		<!-- To be replaced with coloured buttons -->
+		<!-- Message Buttons -->
 		<div class="msgbuttons">
 		<div class="replybutton"> <a href="javascript:toggle_visibility('{{ms.msgid}}');"> </a></div>
 		<div class="unsubscribebutton"> <a href="javascript:hide_me('{{forloop.counter}}')"> </a></div>
 		<div class="viewbutton"> <a href="{% url 'views.conversation' ms.threadid %}">  </a></div>
+		<div class="favoritebutton"> <a href="{% url 'views.addfavorites' ms.msgid %}"> </a></div>
 		</div>
 		<!-- end of button list -->
 

@@ -21,7 +21,7 @@ class MIMessage(models.Model):
 	def __unicode__(self):
 		return u"%s \n %s\n %s\n %s\n %s\n %s" % (self.subject, self.author, self.date, self.listname, self.msg, self.msgid)
 
-class Favourites(models.Model):
+class Favorites(models.Model):
 	'''
 	Model for favourites mapped many-many using 
 	user's email id

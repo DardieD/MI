@@ -28,7 +28,7 @@ def getLatestMessages(email, n=10):
 
 def getMessagesByList(list_of_lists, n=10):
 	'''
-	Get the last n messages from matching list(s)
+	Returns QuerySet of the last n messages from matching list(s)
 	'''
 	message_list = models.MIMessage.objects.filter(listname__in=list_of_lists).order_by('pk').reverse()[:n]
 	
@@ -36,29 +36,28 @@ def getMessagesByList(list_of_lists, n=10):
 
 def getMessageByThreadID(threadid):
 	'''
-	Get all messages with a given threadid
+	Returns QuerySet of messages with a given threadid
 	'''
 	message_list = models.MIMessage.objects.filter(threadid=threadid).order_by('pk')
 	print "Message List generated for threadid ", threadid 
 	print "Message List length: ", len(message_list)
 	return message_list
-	
+
+def getMessageByMessageID(msgid):
+	'''
+	Return MIMessage object of message with
+	given msgid
+	'''
+	message = models.MIMessage.objects.get(msgid=msgid)
+	return message
+		
 def getMessagesBasicAchive(listname, from_date,to_date):
 	'''
-	Get messages for given listname within date range
+	Returns QuerySet of messages for given listname within date range
 	Only display first message in thread ( where msgid = threadid )
 	Basic Archives Display
 	'''
 	message_list = models.MIMessage.objects.filter(listname=listname).filter(date__range=[from_date, to_date]).filter(msgid=F('threadid')).order_by('-pk')
 	return message_list
 
-'''
-from sys import path
-pth = "/vagrant/MI/"
-if pth not in path:
-	path.append(pth)
-# To test 
-mym = MessageRender()
-mym.getLatestMessages("root@systers-dev.systers.org")
-mym.getLatestMessages('salunkeshanu91@gmail.com')
-'''
+

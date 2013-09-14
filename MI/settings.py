@@ -4,6 +4,7 @@ import os.path
 
 PROJECT_DIR = os.path.dirname(__file__)
 
+
 #Settings to test-send email
 #EMAIL_USE_TLS = True
 #EMAIL_HOST = 'smtp.gmail.com'
