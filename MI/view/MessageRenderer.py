@@ -19,11 +19,9 @@ def getLatestMessages(email, n=10):
 		subscribed_lists, other_lists = mmclient.getListOfLists(email)
 		subscribed_lists = [row[1] for row in subscribed_lists]
 	except Exception as ex:
-		print ex
 		return []
 	message_list = models.MIMessage.objects.filter(listname__in=subscribed_lists).order_by('pk').reverse()[:n]
 	
-	print len(message_list)
 	return message_list
 
 def getMessagesByList(list_of_lists, n=10):
@@ -39,8 +37,6 @@ def getMessageByThreadID(threadid):
 	Returns QuerySet of messages with a given threadid
 	'''
 	message_list = models.MIMessage.objects.filter(threadid=threadid).order_by('pk')
-	print "Message List generated for threadid ", threadid 
-	print "Message List length: ", len(message_list)
 	return message_list
 
 def getMessageByMessageID(msgid):

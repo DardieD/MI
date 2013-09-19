@@ -93,7 +93,11 @@ def compose(request):
 			sender = request.user.email
 			recipient = []
 			recipient.append(form.cleaned_data['recipient'])			
-			send_mail(subject,message,sender,recipient, fail_silently=False)
+			mssg_sent = send_mail(subject,message,sender,recipient, fail_silently=False)
+			if mssg_sent == 1:
+				messages.info(request, "Message sent successfully.")
+			else:
+				messages.error(request, "Something happened and we couldn't send that email.")
 			return HttpResponseRedirect('/home/')
 	else:
         	form = forms.Compose(request.user.email) # An unbound form
@@ -122,7 +126,11 @@ def reply(request, subject, msgid, rec, message):
 		subject = "Re: " + subject
 	
 	mssg = EmailMessage(subject,message,sender,recipient,  headers = {'In-Reply-To': msgid})
-	print "MEssage Sent", mssg.send()
+	mssg_sent = mssg.send()
+	if mssg_sent == 1:
+		messages.info(request, "Reply sent successfully.")
+	else:
+		messages.error(request, "Something happened and we couldn't send that email.")
 	
 	return HttpResponseRedirect('/home/')
 	
@@ -136,11 +144,7 @@ def archives(request):
 			listname = form.cleaned_data['listnames']
 			to_date = form.cleaned_data['to_date']
 			from_date = form.cleaned_data['from_date']
-			
-			#print "\nLISTNAME",listname,"\nFROM",from_date,"\nTo_DATE",to_date
-			
 			mslist = MessageRenderer.getMessagesBasicAchive(listname, from_date, to_date)
-			
 			if not mslist:
 				#MSLIST is empty
 				messages.error(request, "No messages for "+ listname +  " list from " + str(from_date) + " to " + str(to_date))
@@ -213,7 +217,6 @@ def newuser(request):
 				
 			except Exception as ex:
 				messages.error(request, "THE USERNAME/EMAIL ID IS ALREADY IN THE SYSTEM")
-				print "USERNAME NOT UNIQUE" , ex
 				# Add error message here 
 				return render_to_response('signup.html', {'form': form}, context_instance=RequestContext(request))
 			
@@ -366,7 +369,6 @@ def subscribe(request, fqdn_listname):
 	Subscribe to list with fqdn_listname = fqdn_listname
 	'''
 	success = mmclient.subscribe(request.user.email, fqdn_listname)
-	print ":: SUCCESS", success
 	return HttpResponseRedirect("/lists")
 
 @login_required
@@ -375,23 +377,6 @@ def unsubscribe(request, fqdn_listname):
 	Subscribe to list with fqdn_listname=fqdn_listname
 	'''
 	success = mmclient.unsubscribe(request.user.email, fqdn_listname)
-	print ":: SUCCESS", success
 	return HttpResponseRedirect("/lists")
 
 
-def sample_message(request):
-	'''
-	Add Sample emails to list
-	'''
-	s="Sample Message"
-	e = "root@systers-dev.systers.org"
-	a = mmclient.getUserName(e)
-	d = '2013-01-01'
-	l = 'test@systers-dev.systers.org'
-	b = 'This is another sample message for test purposes'
-	i = '1d23f456'
-
-	msg = models.MIMessage(subject=s, email=e, author=a, date=d, listname=l, msg=b, msgid=i, threadid=i)
-	msg.save()
-	
-	return HttpResponseRedirect("/home")

@@ -3,7 +3,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html lang="en">
 <head>
-<title> Member Interface </title>
+<title> {{ site_title }} </title>
 <link rel="stylesheet" href="{% static 'MemberInterface/css/style.css' %}">
 <script src="{% static 'MemberInterface/js/script.js' %}"></script>
 </head>
@@ -11,16 +11,17 @@
 <div id="container">
 <div id="header"> 
 	<!-- Secondary links -->
+	{% if site_links %}
 	<div id="slinks"> 
 	<ul>
-	<li> <a href="#"> Link 1 </a> </li>
-	<li> <a href="#"> Link 2 </a> </li>
-	<li> <a href="#"> Link 3 </a> </li>
+		{% for s in site_links %}
+			<li> <a href="{{ s.url }}"> {{ s.name }} </a> </li>	
+		{%endfor%}
 	</ul>
 	</div>
-
-	<a href="{% url 'views.welcome'%}"><img src="{% static 'MemberInterface/img/sample_logo.jpg' %}" alt="Sample Logo"/></a>
-	<h1> Organization name </h1>
+	{%endif%}
+	<a href="{% url 'views.welcome'%}"><img src="{% static logo %}" alt="Sample Logo"/></a>
+	<h1> {{site_title}} </h1>
 	
 </div><!-- end of header -->
 <div id="navbar"> 

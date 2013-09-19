@@ -52,7 +52,6 @@ def setUserPreferences(email, prefs):
 		user = client.get_user(email)
 		original_prefs = user.preferences
 		print user
-		print prefs
 		user.preferences['acknowledge_posts'] = prefs['acknowledge_posts']
 		user.preferences['delivery_mode'] = prefs['delivery_mode']
 		user.preferences['delivery_status'] = prefs['delivery_status']
@@ -62,8 +61,6 @@ def setUserPreferences(email, prefs):
 		user.preferences['receive_own_postings'] = prefs['receive_own_postings']
 		
 		user.save()
-		print client.get_user(email).preferences
-		
 		return "Preferences Changed Successfully"
 		
 	except Exception as ex:
@@ -71,37 +68,6 @@ def setUserPreferences(email, prefs):
 		#Fall Back to Global Preferences
 		return "An Error Occured in mmclient:setUserPreferences ", ex
 		
-		
-'''
-def getProfileDetails(email):
-	
-	#Return dictionary of user profile details as a list of display_name,email elements
-	#The first name-email pair belongs to user.display_name and the id used to create the object
-	#Subsequent elements are derived from user.addresses 
-	
-	try:
-		name_email_list = []
-		user = client.get_user(email)
-		name_email_list.append({'display_name':user.display_name,'email':email})
-		for address in user.addresses:
-			#print type(address), type(email), address==email
-			temp = address._address['email']
-			print temp
-			if  temp == email and address.display_name != user.display_name:
-				#To deal with multiple dispaly names for same email id
-				# Trying to set the display_name gives an AttributeError !
-				#address.display_name = user.display_name
-				pass
-			else:
-				# Multiple email ids
-				name_email_list.append({'display_name':address.display_name,'email':address})
-		return name_email_list
-		
-	except Exception as ex:
-		print ex
-		#log.error("MMClient getProfileDetails: Client doesn't exist")
-		return []
-'''
 
 def getProfileDetails(email):
 	'''
@@ -115,7 +81,6 @@ def getProfileDetails(email):
 		return name_email_list
 		
 	except Exception as ex:
-		print ex
 		return {'display_name':'ERROR', 'email':'ERROR'}
 
 
@@ -127,6 +92,7 @@ def setProfileDetails(email, profile_details):
 	try:
 
 		user = client.get_user(email)
+		#Bandaid cure for making profile changes stick
 		print user
 		old_name = user.display_name
 		user.display_name = profile_details['display_name']
@@ -144,6 +110,7 @@ def changePwd(email, pwd):
 	try:
 		#Changin password in mm system
 		user = client.get_user(email)
+		#Bandaid cure for making profile changes stick
 		print user
 		user.password = pwd
 		user.save()
@@ -168,8 +135,6 @@ def getListOfLists(email):
 		#User not listed with mmclient. 
 		#Show all lists (Subscribed list is empty)
 		#Add user to MM
-		
-		
 		other_lists = []
 		all_lists = client.lists
 		for item in all_lists:
@@ -206,10 +171,8 @@ def subscribe(email , fqdn_listname):
 		user = client.get_user(email)
 		lst = client.get_list(fqdn_listname)
 		lst.subscribe(email, user.display_name)
-		print "SUBSCRIBERS:", lst.members
 		return True
 	except Exception as ex:
-		print ex
 		return False
 	
 def unsubscribe(email , fqdn_listname):
@@ -221,19 +184,10 @@ def unsubscribe(email , fqdn_listname):
 		#retreive user using email-id
 		user = client.get_user(email)
 		lst = client.get_list(fqdn_listname)
-		print "SUBSCRIBERS:", lst.members
 		lst.unsubscribe(email)
 		return True
 	except Exception as ex:
-		print ex
 		return False
-
-# Add mailman.client to path if it doesn't already exist
-MM_PATH = '/root/mailman.client/src/'
-if not MM_PATH in path:
-    path.append(MM_PATH)
-    path.append('/vagrant/MI/MI')
-
 
 #Create Client object
 from mailmanclient import Client

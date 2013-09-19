@@ -26,11 +26,8 @@ def addToFavorites(email, msgid):
 		try:
 			user = models.Favorites.objects.get(email__exact=email)
 		except:
-			print "USER HAS NOT YET BEEN ADDED TO FAVORITES LIST"
 			user = models.Favorites(email=email)
 			user.save()
-	
-		print "In Favorites", inFavorites(user, msgid)
 		#Get MIMessage object
 		if not inFavorites(user, msgid):
 			msg = MessageRenderer.getMessageByMessageID(msgid)
@@ -39,20 +36,14 @@ def addToFavorites(email, msgid):
 		return "Message Added To Favorites List"
 		
 	except Exception as ex:
-		print ex
 		return ex
 
 def removeFromFavorites(email, msgid):
 	'''
 	Remove a message from the favorites list
 	'''
-	print "Remove from Favorites"
-	
 	try:
 		user = models.Favorites.objects.get(email__exact=email)
-		print type(user), msgid
-		
-		print "In Favorites", inFavorites(user, msgid)
 		#Only attempt removal if message already exists in favorites
 		if inFavorites(user, msgid):
 			msg = MessageRenderer.getMessageByMessageID(msgid)
@@ -61,7 +52,6 @@ def removeFromFavorites(email, msgid):
 		return "Message Removed From Favorites List"
 		
 	except Exception as ex:
-		print ex
 		return ex
 
 
@@ -76,7 +66,4 @@ def getFavorites(email):
 	except Exception as ex:
 		#The user never registered favorites
 		return 
-	
-	
-	
-	
+

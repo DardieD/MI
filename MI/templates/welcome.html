@@ -30,8 +30,8 @@
 	{%endif%}
 	
 
-	<h2> Welcome </h2>
+	<h2> {{ welcome_title }} </h2>
 	<p>
-	This is sample content. <br> This section contains some welcome text introducing the organization. <br><br><br>
+	{{ welcome_desc|linebreaks }}
 	</p>
 	{% endblock %}

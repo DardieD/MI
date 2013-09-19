@@ -11,7 +11,7 @@ from mailclient import mmclient
 
 import logging
 log = logging.getLogger('mailman.error')
-
+log.info("MIArchiver imported")
 @implementer(IArchiver)
 class MIArchive:
     """This is the docstring."""
@@ -33,7 +33,6 @@ class MIArchive:
         """See `IArchiver`."""
         
 	log.info("MI: Archive_message")
-	print "\n\nWe got a new message"
 	
 	try:
 		#Temporary variables used in this function
@@ -67,7 +66,6 @@ class MIArchive:
 
 		except Exception as ex:
 			log.info("MI:Exception", ex)
-			print ex
 			author_name = email_id
 					
 		# If the message is a reply, generate threadid
@@ -79,7 +77,6 @@ class MIArchive:
 			replied_to = message['In-Reply-To']
 			temp = models.MIMessage.objects.filter(msgid=replied_to)[0]
 			log.info(temp.threadid)
-			print "This was a reply to ->THREAD ID:", temp.threadid
 			# Create MessageRenderer model object
 			msg = models.MIMessage(subject=message['Subject'], email=author_email, author=author_name, date=msg_date,listname=mlist.fqdn_listname, msg=msg_body, msgid=message['Message-ID'], threadid=temp.threadid)
 		else:
@@ -93,7 +90,5 @@ class MIArchive:
 		log.info("MI: Message Saved")
 
 	except Exception,ex:
-		print "OOPS ! An error occured"
-		print ex
 		log.exception(ex)
 

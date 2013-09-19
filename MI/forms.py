@@ -15,15 +15,16 @@ class SignUp(forms.Form):
 
 class Login(forms.Form):
 	'''
+	Login Form
 	'''
 	username = forms.CharField(label="Username", required=True)
 	password = forms.CharField(widget=forms.PasswordInput, required=True)
 
 class Profile(forms.Form):
 	'''
+	User Profile
 	'''
 	display_name = forms.CharField(label="Screen Name", max_length=100, required=True)
-	#email = forms.EmailField(label="Email ID", required=True)
 	
 class ChangePwd(forms.Form):
 	'''
@@ -52,7 +53,10 @@ class Preferences(forms.Form):
 	receive_own_postings = forms.ChoiceField(widget=forms.RadioSelect, choices=TF)
 
 class Compose(forms.Form):
-
+	'''
+	Compose New Message
+	Form for compose-screen
+	'''
 	def __init__(self, email, *args, **kwargs):
 		super(Compose, self).__init__(*args, **kwargs)
 		
@@ -83,9 +87,8 @@ class ArchiveRenderer(forms.Form):
 			CHOICES = CHOICES + ((lst[1],lst[0]),)
 		
 		self.fields['listnames'] = forms.ChoiceField(choices=CHOICES)
-		self.fields.keyOrder = ['listnames', 'from_date', 'to_date']#,'order_by']
+		self.fields.keyOrder = ['listnames', 'from_date', 'to_date']
         
-        #order_CHOICES = ()
 	from_date = forms.DateField(widget=extras.SelectDateWidget)
 	to_date = forms.DateField(widget=extras.SelectDateWidget)
 	

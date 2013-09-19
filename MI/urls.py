@@ -20,7 +20,6 @@ urlpatterns = patterns('',
 	(r'^addfavorites/(.+)$', views.addfavorites),
 	(r'^removefavorites/(.+)$', views.removefavorites),
 	
-	
 	(r'^lists/$', views.lists),
 	(r'^subscribe/(.+)/$', views.subscribe),
 	(r'^unsubscribe/(.+)/$', views.unsubscribe),
@@ -33,7 +32,6 @@ urlpatterns = patterns('',
 	(r'^preferences/$',views.preferences),
 	(r'^newuser/$', views.newuser),
 
-	(r'^sample/$', views.sample_message),
 	(r'^thanks/$', views.thanks),
 	(r'^logout/$',views.logout),
 	
